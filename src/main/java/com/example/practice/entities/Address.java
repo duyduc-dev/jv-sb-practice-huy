@@ -32,5 +32,5 @@ public class Address implements Serializable {
     private String userId;
 
     @Column(name = "address_name")
-    private String name;
+    private String addressName;
 }
