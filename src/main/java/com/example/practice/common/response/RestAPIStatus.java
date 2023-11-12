@@ -2,7 +2,11 @@ package com.example.practice.common.response;
 
 public enum RestAPIStatus {
     OK(200, "OK"),
-    NOT_FOUND(404, "Not Found")
+    NOT_FOUND(404, "Not Found"),
+    BAD_REQUEST(400, "Bad request"),
+    EXISTED(405, "Already existed"),
+    CONFLICT(409, "Conflict"),
+    BAD_PARAMS(406, "There is some invalid data"),
     ;
 
 
