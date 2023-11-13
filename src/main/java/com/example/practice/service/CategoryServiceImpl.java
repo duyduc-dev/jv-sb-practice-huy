@@ -34,29 +34,24 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public List<TreeCategoryResponse> getTreeCategory() {
         List<Category> categoryList = this.categoryRepository.findAllOrderLevel();
-        TreeCategoryResponse treeCategoryResponses = TreeCategoryResponse.builder()
-                .id("root")
-                .name("root")
-                .level(-1)
-                .children(new ArrayList<>())
-                .build();
+        TreeCategoryResponse root = new TreeCategoryResponse();
         for (Category category: categoryList) {
             if(category.getParentId() == null) {
-                treeCategoryResponses.getChildren().add(categoryHelper.convertCategoryToTreeItem(category));
+                root.getChildren().add(categoryHelper.convertCategoryToTreeItem(category));
             } else {
-                categoryHelper.addChildToParent(treeCategoryResponses, category);
+                categoryHelper.insertNodeToTree(root, category);
             }
         }
-        return treeCategoryResponses.getChildren();
+        return root.getChildren();
     }
 
     @Override
     public TreeCategoryResponse getTreeCategoryById(String id) {
         Category category = this.getCategoryById(id);
-        TreeCategoryResponse root = this.categoryHelper.convertCategoryToTreeItem(category);
+        TreeCategoryResponse root = new TreeCategoryResponse(category);
         List<Category> chidren = this.categoryRepository.findAllByLevelGreaterThanOrderByLevel(category.getLevel());
         for (Category  childItem: chidren) {
-            categoryHelper.addChildToParent(root, childItem);
+            categoryHelper.insertNodeToTree(root, childItem);
         }
         return root;
     }
