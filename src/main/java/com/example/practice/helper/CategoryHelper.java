@@ -21,17 +21,18 @@ public class CategoryHelper {
     }
 
 
-    public void addChildToParent(TreeCategoryResponse root, int level, Category category) {
+    public void addChildToParent(TreeCategoryResponse root, Category category) {
         // di toi level
         // kiếm node có parentId
         // add
-        if(root.getLevel() == level && Objects.equals(root.getId(), category.getParentId())) {
+        int parentLevel = category.getLevel() - 1;
+        if(root.getLevel() == parentLevel && Objects.equals(root.getId(), category.getParentId())) {
             root.getChildren().add(this.convertCategoryToTreeItem(category));
             return;
         }
         for (TreeCategoryResponse treeCategoryResponse: root.getChildren()) {
-            if(treeCategoryResponse.getLevel() != level) {
-                addChildToParent(treeCategoryResponse, level, category);
+            if(treeCategoryResponse.getLevel() != parentLevel) {
+                addChildToParent(treeCategoryResponse, category);
             } else if(treeCategoryResponse.getId().equals(category.getParentId())) {
                 treeCategoryResponse.getChildren().add(this.convertCategoryToTreeItem(category));
             }

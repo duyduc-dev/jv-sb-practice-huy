@@ -40,14 +40,12 @@ public class CategoryServiceImpl implements CategoryService{
                 .level(-1)
                 .children(new ArrayList<>())
                 .build();
-
         for (Category category: categoryList) {
             if(category.getParentId() == null) {
                 treeCategoryResponses.getChildren().add(categoryHelper.convertCategoryToTreeItem(category));
             } else {
-                categoryHelper.addChildToParent(treeCategoryResponses, category.getLevel() - 1, category);
+                categoryHelper.addChildToParent(treeCategoryResponses, category);
             }
-
         }
         return treeCategoryResponses.getChildren();
     }
@@ -58,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService{
         TreeCategoryResponse root = this.categoryHelper.convertCategoryToTreeItem(category);
         List<Category> chidren = this.categoryRepository.findAllByLevelGreaterThanOrderByLevel(category.getLevel());
         for (Category  childItem: chidren) {
-            categoryHelper.addChildToParent(root, childItem.getLevel() - 1, childItem);
+            categoryHelper.addChildToParent(root, childItem);
         }
         return root;
     }
